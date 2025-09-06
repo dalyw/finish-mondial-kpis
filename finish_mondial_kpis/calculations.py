@@ -34,7 +34,6 @@ constant_symbols = load_symbols_from_csv(f"{base_url}data/global_parameters.csv"
 # constant_symbols = load_symbols_from_csv("data/global_parameters.csv")
 sym = {**data_symbols, **constant_symbols}
 sym['landfill_conversion_factor'] = CustomSymbol('landfill_conversion_factor', r'\text{Conversion Factor}')
-sym['flu_factor'] = CustomSymbol('flu_factor', r'F_{LU}')
 
 
 CALCULATION_EXPRESSIONS = {
@@ -150,14 +149,13 @@ def generate_latex(calc_key):
     return "\\begin{align}\n" + " \\\\\n".join(equations) + "\n\\end{align}"
 
 
-def calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st, flu_factor):
+def calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st):
     """Calculate and display results for a given calculation."""
     calc = CALCULATION_EXPRESSIONS[calc_key]
     result = {}
     # create substitution dict for symbol evalution
     subs = {sym[key]: (landfill_conversion_factor if key == 'landfill_conversion_factor' else 
                     land_coverage if key == 'land_coverage' else
-                    flu_factor if key == 'flu_factor' else
                     sums[key] if key in sums else const[key]['value'])
         for key in sym}
         

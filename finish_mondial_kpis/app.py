@@ -268,7 +268,6 @@ with tab1:   # Project data inputs
         landfill_key = LANDFILL_OPTIONS[selected_landfill]
         landfill_conversion_factor = const[f"{climate_key}_{landfill_key}"]['value']
         st.metric("Conversion Factor", f"{landfill_conversion_factor:.2f}")
-        st.metric("Land-use Factor (FLU)", f"{flu_factor:.2f}")
 
     # Land Coverage Input
     land_coverage = st.number_input(
@@ -323,7 +322,7 @@ with tab2:
     # Calculate and display results for parts a - i
     results = {}
     for calc_key in ['a', 'b', 'c', 'e', 'f', 'g', 'h', 'i']:
-        results[calc_key] = calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st, flu_factor)
+        results[calc_key] = calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st)
         st.divider()
 
     # Summary

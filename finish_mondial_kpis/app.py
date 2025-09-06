@@ -267,7 +267,6 @@ with tab1:   # Project data inputs
         climate_key = CLIMATE_OPTIONS[selected_climate]
         landfill_key = LANDFILL_OPTIONS[selected_landfill]
         landfill_conversion_factor = const[f"{climate_key}_{landfill_key}"]['value']
-        flu_factor = const[f"flu_{climate_key}"]['value']
         st.metric("Conversion Factor", f"{landfill_conversion_factor:.2f}")
         st.metric("Land-use Factor (FLU)", f"{flu_factor:.2f}")
 

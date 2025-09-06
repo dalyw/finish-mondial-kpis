@@ -1,0 +1,6 @@
+name,latex_name
+land_coverage,\text{Land Coverage [acres]}
+total_compost,\text{Compost [t]}
+total_cocompost,\text{Co-Compost [t]}
+total_fs,\text{Faecal Sludge Treated [m}^3\text{]}
+total_recycle,\text{Plastic Recycled [t]}

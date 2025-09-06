@@ -1,0 +1,15 @@
+Climate ("temperate_wet" "tropical_wet" or "dry"),,,,
+tropical_wet,,,,
+,,,,
+Landfill depth ("shallow" if <5m or "deep" if >5m),,,,
+shallow,,,,
+,,,,
+Land Coverage (acres),,,,
+500,,,,
+,,,,
+# Quarterly Data
+Category,Y1Q1,Y1Q2,Y1Q3,Y1Q4
+Compost (t),61.68,87.72,90.53,77.43
+Co-Compost (t),0,0,0,0
+Faecal Sludge (m³),25.0,20.0,15.0,30.0
+Plastic Recycling (t),70.0,0.0,0.0,0.0

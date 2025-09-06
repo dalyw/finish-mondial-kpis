@@ -1,0 +1,33 @@
+name,value,units,source,section,latex_name
+kg_per_ton,1000,kg/ton,Standard conversion factor,Conversions,\text{Kg per Ton [kg/t]}
+co2_c_ratio,3.67,ratio,Molecular weight ratio (44.01/12),Conversions,\text{CO}_2/\text{C Stoichiometry}
+n_content_compost,0.02,kg/ton compost,Lab test reports,B,\text{N Content [kg/t]}
+p_content_compost,0.01,kg/ton compost,Lab test reports,B,\text{P Content [kg/t]}
+k_content_compost,0.01,kg/ton compost,Lab test reports,B,\text{K Content [kg/t]}
+n_production_emissions,3.0,kg CO2/kg N,https://www.ipcc-nggip.iges.or.jp/public/2006gl/pdf/3_Volume3/V3_3_Ch3_Chemical_Industry.pdf,B,\text{N Fertilizer Emissions Intensity [kg CO}_2\text{/kg N]}
+fs_conversion_factor,0.11,tCO2/m³,IPCC TABLE 6.3 for discharge to aquatic environments https://www.ipcc-nggip.iges.or.jp/public/2019rf/pdf/5_Volume5/19R_V5_6_Ch06_Wastewater.pdf,C,\text{FS Conversion Factor [tCO}_2\text{/m}^3\text{]}
+toc_content,20.5,kg/ton compost,Lab test reports,D,\text{TOC Content [kg/t]}
+n_recovery_content,1.94,kg/ton compost,Lab test reports,E,\text{N Content [kg/t]}
+p2o5_recovery_content,1.22,kg/ton compost,Lab test reports,E,\text{P}_2\text{O}_5 \text{ Content [kg/t]}
+k2o_recovery_content,0.45,kg/ton compost,Lab test reports,E,\text{K}_2\text{O Content [kg/t]}
+water_reduction_percent,0.3,%,SWFF study report (n=50 farmers sample size),F,\text{Water Reduction [\%]}
+diesel_per_acre,295,lit/year,Research on ground,F,\text{Diesel per Acre [L/acre]}
+energy_per_liter_diesel,10.6,kWh,Research on ground,F,\text{Diesel Energy Content [kWh/L]}
+co2_per_liter_diesel,2.7,kg CO2/lit,Carbon footprint - timeforchange.org,G,\text{Diesel CO}_2 \text{ Content [kg CO}_2\text{/L]}
+plastic_emission_factor,2.94,kg CO2/kg,EPA WARM model,H,\text{Plastic Emission Intensity [kg CO}_2\text{/kg]}
+new_plastic_emissions,6.0,kg CO2/kg,Plastic bags and plastic bottles - CO2 emissions during their lifetime,I,\text{New Plastic Emissions Intensity [kg CO}_2\text{/kg]}
+recycling_emissions,3.5,kg CO2/kg,Plastic waste recycling process,I,\text{Recycling Emissions [kg CO}_2\text{/kg]}
+tropical_wet_deep,0.85,conversion factor,Climate conditions - Tropical wet + Landfill > 5m,A,\text{Tropical Wet Deep Conversion Factor}
+tropical_wet_shallow,0.45,conversion factor,Climate conditions - Tropical wet + Landfill < 5m,A,\text{Tropical Wet Shallow Conversion Factor}
+temperate_wet_deep,0.55,conversion factor,Climate conditions - Temperate wet + Landfill > 5m,A,\text{Temperate Wet Deep Conversion Factor}
+temperate_wet_shallow,0.35,conversion factor,Climate conditions - Temperate wet + Landfill < 5m,A,\text{Temperate Wet Shallow Conversion Factor}
+dry_climate_deep,0.0,conversion factor,Climate conditions - Dry climate (not enough data),A,\text{Dry Climate Deep Conversion Factor}
+dry_climate_shallow,0.0,conversion factor,Climate conditions - Dry climate (not enough data),A,\text{Dry Climate Shallow Conversion Factor}
+flu_tropical_wet,0.58,land-use factor,IPCC Table 3.3.4 - Tropical wet long-term cultivated,D,\text{F}_{LU} \text{ Tropical Wet}
+flu_tropical_dry,0.69,land-use factor,IPCC Table 3.3.4 - Tropical dry long-term cultivated,D,\text{F}_{LU} \text{ Tropical Dry}
+flu_temperate_wet,0.71,land-use factor,IPCC Table 3.3.4 - Temperate wet long-term cultivated,D,\text{F}_{LU} \text{ Temperate Wet}
+flu_temperate_dry,0.82,land-use factor,IPCC Table 3.3.4 - Temperate dry long-term cultivated,D,\text{F}_{LU} \text{ Temperate Dry}
+fmg_compost,1.2,management factor,IPCC - Compost application increases soil carbon,D,\text{F}_{MG} \text{ Compost}
+fi_compost,1.1,input factor,IPCC - Organic matter input increases soil carbon,D,\text{F}_{I} \text{ Compost Input}
+socref_tropical,8.5,kg C/m²,IPCC Table 3.3.3 - Tropical reference carbon stock,D,\text{SOC}_{REF} \text{ Tropical}
+socref_temperate,10.0,kg C/m²,IPCC Table 3.3.3 - Temperate reference carbon stock,D,\text{SOC}_{REF} \text{ Temperate}

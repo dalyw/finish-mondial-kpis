@@ -7,27 +7,34 @@ from sympy import latex, Symbol
 import pandas as pd
 import os
 
+class CustomSymbol(Symbol):
+    """Custom Symbol class with LaTeX name support."""
+    def __new__(cls, name, latex_name=None):
+        obj = Symbol.__new__(cls, name)
+        obj._latex_name = latex_name or name
+        return obj
+    
+    def _latex(self, printer):
+        return self._latex_name
+
 def load_symbols_from_csv(url):
     df = pd.read_csv(url)
-    symbols = {}
-    for _, row in df.iterrows():
-        symbol = Symbol(row['name'])
-        symbol._latex_name = row['latex_name']
-        symbols[row['name']] = symbol
-    return symbols
+    return {
+        row['name']: CustomSymbol(row['name'], row['latex_name']) 
+        for _, row in df.iterrows()
+    }
 
 # Load data from GitHub repository
 base_url = "https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/"
 data_symbols = load_symbols_from_csv(f"{base_url}data/project_parameters.csv")
 constant_symbols = load_symbols_from_csv(f"{base_url}data/global_parameters.csv")
-sym = {**data_symbols, **constant_symbols}
-conversion_factor = Symbol('landfill_conversion_factor')
-conversion_factor._latex_name = r'\text{Conversion Factor}'
-sym['landfill_conversion_factor'] = conversion_factor
 
-flu_factor = Symbol('flu_factor')
-flu_factor._latex_name = r'F_{LU}'
-sym['flu_factor'] = flu_factor
+# # Uncomment to load data from local files (temporarily for testing)
+# data_symbols = load_symbols_from_csv("data/project_parameters.csv")
+# constant_symbols = load_symbols_from_csv("data/global_parameters.csv")
+sym = {**data_symbols, **constant_symbols}
+sym['landfill_conversion_factor'] = CustomSymbol('landfill_conversion_factor', r'\text{Conversion Factor}')
+sym['flu_factor'] = CustomSymbol('flu_factor', r'F_{LU}')
 
 
 CALCULATION_EXPRESSIONS = {
@@ -67,20 +74,6 @@ CALCULATION_EXPRESSIONS = {
             }
         }
     },
-    
-    'd': {
-        'title': 'Part D: Carbon Sequestration',
-        'icon': 'circular-recycle.png',
-        'equations': {
-            'Carbon Sequestered': {
-                'expression': sym['total_cocompost'] * sym['toc_content'] * sym['flu_factor'] * 
-                           sym['fmg_compost'] * sym['fi_compost'] / sym['kg_per_ton'],
-                'units': 't',
-                'decimals': 2
-            }
-        }
-    },
-    
     'e': {
         'title': 'Part E: Nutrients (NPK) Recovery',
         'icon': 'circular-tractor.png',
@@ -150,9 +143,10 @@ def generate_latex(calc_key):
     """Generate LaTeX equation from symbolic expression."""
     calc = CALCULATION_EXPRESSIONS[calc_key]
     equations = []
+    mul_symbol = r' \times '
     for label, expr_data in calc['equations'].items():
         equation = expr_data['expression']
-        equations.append(f"\\text{{{label}}} = {latex(equation, mul_symbol=r' \times ')}")
+        equations.append(f"\\text{{{label}}} = {latex(equation, mul_symbol=mul_symbol)}")
     return "\\begin{align}\n" + " \\\\\n".join(equations) + "\n\\end{align}"
 
 

@@ -11,7 +11,7 @@ import streamlit.components.v1 as components
 from mappings import (
     DATA_CATEGORIES, CLIMATE_OPTIONS, LANDFILL_OPTIONS, DISPLAY_MAP, QUARTERS
     )
-from calculations import calculate_and_display
+from calculations import calculate_and_display, base_url
 
 st.set_page_config(
     page_title="Safe Sanitation and Climate Mitigation Calculator",
@@ -101,8 +101,7 @@ def load_projects_cached():
     project_files = ["arrp","coonoor_mcc", "custom", "krrp"]
     for project_file in project_files:
         project_name = project_file.replace('_', ' ').upper()
-        url = f"https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/projects/{project_file}.csv"
-        response = requests.get(url)
+        response = requests.get(f"{base_url}data/projects/{project_file}.csv")
         project_data = parse_csv_file(response.text)
         projects[project_name] = project_data
     return projects
@@ -110,7 +109,7 @@ def load_projects_cached():
 @st.cache_data
 def load_constants_cached():
     """Load constants from CSV and return as dictionary."""
-    constants_df = pd.read_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/global_parameters.csv")
+    constants_df = pd.read_csv(f"{base_url}data/global_parameters.csv")
     return {row['name']: {
         'value': row['value'], 
         'units': row['units'], 
@@ -165,15 +164,12 @@ with st.sidebar:
     st.markdown("""
     This Climate Change Mitigation KPI Calculator helps measure the environmental impact of FINISH Mondial's sanitation projects, including:
     
-    - CO₂ emissions saved through compost production, reduced irrigation, and carbon sequestration
-    - Plastic waste reduction and recycling
+    - CO₂ emissions saved through compost production, reduced irrigation, and plastic waste reduction and recycling
     - Nutrient recovery from organic waste
-    - Diesel use reduction
     """)
 
 # Main content
-header_img_url = "https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/images/hqdefault.jpg"
-response = requests.get(header_img_url)
+response = requests.get(f"{base_url}images/hqdefault.jpg")
 img_base64 = base64.b64encode(response.content).decode()
 st.markdown(
     f"""
@@ -327,7 +323,7 @@ with tab1:   # Project data inputs
 with tab2:
     # Calculate and display results for parts a - i
     results = {}
-    for calc_key in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']:
+    for calc_key in ['a', 'b', 'c', 'e', 'f', 'g', 'h', 'i']:
         results[calc_key] = calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st, flu_factor)
         st.divider()
 
@@ -338,13 +334,11 @@ with tab2:
                     if 'co2_saved_[t]' in results[key]]
     total_co2_saved = sum(results[section]['co2_saved_[t]'] for section in co2_sections)
     with col1:
-        st.metric("Total CO2 Saved", f"{total_co2_saved:.0f} tCO2")
+        st.metric("Total CO2 Saved", f"{total_co2_saved:.0f} tCO2e")
         st.metric("Total Compost Generated", f"{sums['total_compost']:.0f} t")
     with col2:
         st.metric("Total Energy Saved", f"{results['f']['total_energy_saved']:.0f} kWh")
         st.metric("Total NPK Recovery", f"{results['e']['total_npk_recovery']:.2f} t")
-        st.metric("CO2 Sequestered", f"{results['d']['co2_sequestered']:.2f} tCO2")
     
     if st.button("← Back to Data Input", type="secondary"):
         switch_tab(0)
-        

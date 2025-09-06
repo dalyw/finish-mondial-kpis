@@ -21,13 +21,5 @@ tropical_wet_deep,0.85,conversion factor,Climate conditions - Tropical wet + Lan
 tropical_wet_shallow,0.45,conversion factor,Climate conditions - Tropical wet + Landfill < 5m,A,\text{Tropical Wet Shallow Conversion Factor}
 temperate_wet_deep,0.55,conversion factor,Climate conditions - Temperate wet + Landfill > 5m,A,\text{Temperate Wet Deep Conversion Factor}
 temperate_wet_shallow,0.35,conversion factor,Climate conditions - Temperate wet + Landfill < 5m,A,\text{Temperate Wet Shallow Conversion Factor}
-dry_climate_deep,0.0,conversion factor,Climate conditions - Dry climate (not enough data),A,\text{Dry Climate Deep Conversion Factor}
-dry_climate_shallow,0.0,conversion factor,Climate conditions - Dry climate (not enough data),A,\text{Dry Climate Shallow Conversion Factor}
-flu_tropical_wet,0.58,land-use factor,IPCC Table 3.3.4 - Tropical wet long-term cultivated,D,\text{F}_{LU} \text{ Tropical Wet}
-flu_tropical_dry,0.69,land-use factor,IPCC Table 3.3.4 - Tropical dry long-term cultivated,D,\text{F}_{LU} \text{ Tropical Dry}
-flu_temperate_wet,0.71,land-use factor,IPCC Table 3.3.4 - Temperate wet long-term cultivated,D,\text{F}_{LU} \text{ Temperate Wet}
-flu_temperate_dry,0.82,land-use factor,IPCC Table 3.3.4 - Temperate dry long-term cultivated,D,\text{F}_{LU} \text{ Temperate Dry}
-fmg_compost,1.2,management factor,IPCC - Compost application increases soil carbon,D,\text{F}_{MG} \text{ Compost}
-fi_compost,1.1,input factor,IPCC - Organic matter input increases soil carbon,D,\text{F}_{I} \text{ Compost Input}
-socref_tropical,8.5,kg C/m²,IPCC Table 3.3.3 - Tropical reference carbon stock,D,\text{SOC}_{REF} \text{ Tropical}
-socref_temperate,10.0,kg C/m²,IPCC Table 3.3.3 - Temperate reference carbon stock,D,\text{SOC}_{REF} \text{ Temperate}
+dry_climate_deep,0.0,conversion factor,Climate conditions - Dry climate,A,\text{Dry Climate Deep Conversion Factor}
+dry_climate_shallow,0.0,conversion factor,Climate conditions - Dry climate,A,\text{Dry Climate Shallow Conversion Factor}

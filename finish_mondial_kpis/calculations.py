@@ -7,58 +7,31 @@ from sympy import latex, Symbol
 import pandas as pd
 import os
 
-# Define data categories and field mappings
-DATA_CATEGORIES = {
-    'compost': 'Compost (t)',
-    'cocompost': 'Co-Compost (t)',
-    'fs': 'Faecal Sludge (m³)', 
-    'recycle': 'Plastic Recycling (t)'
-}
-DATA_FIELDS = ['Q'] + [f"{key}_q" for key in DATA_CATEGORIES]
-QUARTERS = range(1, 5)
-
-# Climate and landfill options
-CLIMATE_OPTIONS = {
-    "Tropical wet climate": "tropical_wet",
-    "Temperate wet climate": "temperate_wet",
-    "Dry Climate": "dry_climate"
-}
-LANDFILL_OPTIONS = {
-    "Landfill depth > 5m": "deep",
-    "Landfill depth < 5m": "shallow"
-}
-DISPLAY_MAP = {
-    v: k for k, v in {**CLIMATE_OPTIONS, **LANDFILL_OPTIONS}.items()
-    }
-
-
-class CustomSymbol(Symbol):
-    """Custom Symbol class with LaTeX name support."""
-    def __new__(cls, name, latex_name=None):
-        obj = Symbol.__new__(cls, name)
-        obj._latex_name = latex_name or name
-        return obj
-    
-    def _latex(self, printer):
-        return self._latex_name
-
 def load_symbols_from_csv(url):
     df = pd.read_csv(url)
-    return {
-        row['name']: CustomSymbol(row['name'], row['latex_name']) 
-        for _, row in df.iterrows()
-    }
+    symbols = {}
+    for _, row in df.iterrows():
+        symbol = Symbol(row['name'])
+        symbol._latex_name = row['latex_name']
+        symbols[row['name']] = symbol
+    return symbols
 
 # Load data from GitHub repository
-data_symbols = load_symbols_from_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/data_inputs.csv")
-constant_symbols = load_symbols_from_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/constants.csv")
+base_url = "https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/"
+data_symbols = load_symbols_from_csv(f"{base_url}data/project_parameters.csv")
+constant_symbols = load_symbols_from_csv(f"{base_url}data/global_parameters.csv")
 sym = {**data_symbols, **constant_symbols}
-sym['landfill_conversion_factor'] = CustomSymbol('landfill_conversion_factor', r'\text{Conversion Factor}')
-sym['flu_factor'] = CustomSymbol('flu_factor', r'F_{LU}')
+conversion_factor = Symbol('landfill_conversion_factor')
+conversion_factor._latex_name = r'\text{Conversion Factor}'
+sym['landfill_conversion_factor'] = conversion_factor
+
+flu_factor = Symbol('flu_factor')
+flu_factor._latex_name = r'F_{LU}'
+sym['flu_factor'] = flu_factor
 
 
 CALCULATION_EXPRESSIONS = {
-    'part_a': {
+    'a': {
         'title': 'Part A: Carbon Emissions Saved Through Compost Production',
         'icon': 'circular-recycle.png',
         'equations': {
@@ -70,7 +43,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_b': {
+    'b': {
         'title': 'Part B: Fertilizer Replacement with Compost',
         'icon': 'circular-tractor.png',
         'equations': {
@@ -83,7 +56,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_c': {
+    'c': {
         'title': 'Part C: Faecal Sludge Treatment',
         'icon': 'circular-man-bricks.png',
         'equations': {
@@ -95,7 +68,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_d': {
+    'd': {
         'title': 'Part D: Carbon Sequestration',
         'icon': 'circular-recycle.png',
         'equations': {
@@ -108,7 +81,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_e': {
+    'e': {
         'title': 'Part E: Nutrients (NPK) Recovery',
         'icon': 'circular-tractor.png',
         'equations': {
@@ -121,7 +94,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_f': {
+    'f': {
         'title': 'Part F: Energy Saving Through Reduced Irrigation',
         'icon': 'circular-recycle.png',
         'equations': {
@@ -134,7 +107,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_g': {
+    'g': {
         'title': 'Part G: CO2 Savings from Diesel Reduction',
         'icon': 'circular-truck.png',
         'equations': {
@@ -147,7 +120,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_h': {
+    'h': {
         'title': 'Part H: Plastic Burning Avoidance',
         'icon': 'circular-recycle.png',
         'equations': {
@@ -159,7 +132,7 @@ CALCULATION_EXPRESSIONS = {
         }
     },
     
-    'part_i': {
+    'i': {
         'title': 'Part I: Plastic Recycling',
         'icon': 'circular-recycle.png',
         'equations': {
@@ -176,23 +149,16 @@ CALCULATION_EXPRESSIONS = {
 def generate_latex(calc_key):
     """Generate LaTeX equation from symbolic expression."""
     calc = CALCULATION_EXPRESSIONS[calc_key]
-    expression = calc['equations']    
-    mul_symbol = r' \times '
-    
     equations = []
-    for label, expr_data in expression.items():
+    for label, expr_data in calc['equations'].items():
         equation = expr_data['expression']
-        equations.append(f"\\text{{{label}}} = {latex(equation, mul_symbol=mul_symbol)}")
+        equations.append(f"\\text{{{label}}} = {latex(equation, mul_symbol=r' \times ')}")
     return "\\begin{align}\n" + " \\\\\n".join(equations) + "\n\\end{align}"
 
 
 def calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st, flu_factor):
     """Calculate and display results for a given calculation."""
-    
-    # Display title with icon and auto-generated equation
     calc = CALCULATION_EXPRESSIONS[calc_key]
-    
-    # Calculate results
     result = {}
     # create substitution dict for symbol evalution
     subs = {sym[key]: (landfill_conversion_factor if key == 'landfill_conversion_factor' else 
@@ -204,8 +170,7 @@ def calculate_and_display(calc_key, sums, const, landfill_conversion_factor, lan
     # Display icon, section title, and values
     col1, col2, col3 = st.columns([1, 12, 8])
     with col1:
-        icon_url = f"https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/images/{calc['icon']}"
-        st.image(icon_url, width=50)
+        st.image(f"{base_url}images/{calc['icon']}", width=50)
     with col2:
         st.subheader(calc['title'])
     with col3:  

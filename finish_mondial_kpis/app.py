@@ -8,10 +8,10 @@ import base64
 import requests
 import streamlit.components.v1 as components
 
-from calculations_and_mappings import (
-    DATA_CATEGORIES, DATA_FIELDS, CLIMATE_OPTIONS, LANDFILL_OPTIONS,
-    DISPLAY_MAP, QUARTERS, calculate_and_display
-)
+from mappings import (
+    DATA_CATEGORIES, CLIMATE_OPTIONS, LANDFILL_OPTIONS, DISPLAY_MAP, QUARTERS
+    )
+from calculations import calculate_and_display
 
 st.set_page_config(
     page_title="Safe Sanitation and Climate Mitigation Calculator",
@@ -110,7 +110,7 @@ def load_projects_cached():
 @st.cache_data
 def load_constants_cached():
     """Load constants from CSV and return as dictionary."""
-    constants_df = pd.read_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/constants.csv")
+    constants_df = pd.read_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/global_parameters.csv")
     return {row['name']: {
         'value': row['value'], 
         'units': row['units'], 
@@ -165,11 +165,10 @@ with st.sidebar:
     st.markdown("""
     This Climate Change Mitigation KPI Calculator helps measure the environmental impact of FINISH Mondial's sanitation projects, including:
     
-    - CO₂ emissions saved through compost production
-    - Energy savings from reduced irrigation
-    - Carbon sequestration benefits
+    - CO₂ emissions saved through compost production, reduced irrigation, and carbon sequestration
     - Plastic waste reduction and recycling
     - Nutrient recovery from organic waste
+    - Diesel use reduction
     """)
 
 # Main content
@@ -328,7 +327,7 @@ with tab1:   # Project data inputs
 with tab2:
     # Calculate and display results for parts a - i
     results = {}
-    for calc_key in ['part_a', 'part_b', 'part_c', 'part_d', 'part_e', 'part_f', 'part_g', 'part_h', 'part_i']:
+    for calc_key in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i']:
         results[calc_key] = calculate_and_display(calc_key, sums, const, landfill_conversion_factor, land_coverage, st, flu_factor)
         st.divider()
 
@@ -342,10 +341,9 @@ with tab2:
         st.metric("Total CO2 Saved", f"{total_co2_saved:.0f} tCO2")
         st.metric("Total Compost Generated", f"{sums['total_compost']:.0f} t")
     with col2:
-        st.metric("Total Energy Saved", f"{results['part_f']['total_energy_saved']:.0f} kWh")
-        st.metric("Total NPK Recovery", f"{results['part_e']['total_npk_recovery']:.2f} t")
-        if 'part_d' in results and 'co2_sequestered' in results['part_d']:
-            st.metric("CO2 Sequestered", f"{results['part_d']['co2_sequestered']:.2f} tCO2")
+        st.metric("Total Energy Saved", f"{results['f']['total_energy_saved']:.0f} kWh")
+        st.metric("Total NPK Recovery", f"{results['e']['total_npk_recovery']:.2f} t")
+        st.metric("CO2 Sequestered", f"{results['d']['co2_sequestered']:.2f} tCO2")
     
     if st.button("← Back to Data Input", type="secondary"):
         switch_tab(0)

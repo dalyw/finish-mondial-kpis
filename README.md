@@ -26,6 +26,7 @@ Category,Y1Q1,Y1Q2,Y1Q3,Y1Q4
 Compost (tonnes),0.0,0.0,0.0,0.0
 Co-Compost (tonnes),0.0,0.0,0.0,0.0
 Faecal Sludge (m³),0.0,0.0,0.0,0.0
+```
 
 ## Project Structure
 
@@ -72,7 +73,7 @@ The app will open in your browser at `http://localhost:8501`
 
    The application automatically generates LaTeX equations from the calculation definitions. To modify calculations and parameters, edit these files:
 
-   **Calculation Formulas** (`finish_mondial_kpis/calculations_and_mappings.py`):
+   **Calculation Formulas** (`finish_mondial_kpis/calculations.py`):
    - Contains all calculation expressions for Parts A-I
    - Defines symbolic equations using SymPy
    - LaTeX formulas are automatically generated from these expressions

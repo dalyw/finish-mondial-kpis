@@ -42,15 +42,16 @@ class CustomSymbol(Symbol):
     def _latex(self, printer):
         return self._latex_name
 
-def load_symbols_from_csv(filepath):
-    df = pd.read_csv(filepath)
+def load_symbols_from_csv(url):
+    df = pd.read_csv(url)
     return {
         row['name']: CustomSymbol(row['name'], row['latex_name']) 
         for _, row in df.iterrows()
     }
 
-data_symbols = load_symbols_from_csv("data/data_inputs.csv")
-constant_symbols = load_symbols_from_csv("data/constants.csv")
+# Load data from GitHub repository
+data_symbols = load_symbols_from_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/data_inputs.csv")
+constant_symbols = load_symbols_from_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/constants.csv")
 sym = {**data_symbols, **constant_symbols}
 sym['landfill_conversion_factor'] = CustomSymbol('landfill_conversion_factor', r'\text{Conversion Factor}')
 sym['flu_factor'] = CustomSymbol('flu_factor', r'F_{LU}')
@@ -203,7 +204,8 @@ def calculate_and_display(calc_key, sums, const, landfill_conversion_factor, lan
     # Display icon, section title, and values
     col1, col2, col3 = st.columns([1, 12, 8])
     with col1:
-        st.image(f"images/{calc['icon']}", width=50)
+        icon_url = f"https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/images/{calc['icon']}"
+        st.image(icon_url, width=50)
     with col2:
         st.subheader(calc['title'])
     with col3:  

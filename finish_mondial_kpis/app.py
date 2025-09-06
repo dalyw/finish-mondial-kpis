@@ -5,6 +5,7 @@ import os
 import glob
 import time
 import base64
+import requests
 import streamlit.components.v1 as components
 
 from calculations_and_mappings import (
@@ -96,19 +97,20 @@ def create_quarterly_dataframe(project_data, num_years, quarterly_cols):
 def load_projects_cached():
     """Load all project data with caching."""
     projects = {}
-    for file_path in glob.glob("data/projects/*.csv"):
-        project_name = os.path.basename(file_path).replace('.csv', '').replace('_', ' ').upper()
-        with open(file_path, 'r') as f:
-            content = f.read()
-        
-        project_data = parse_csv_file(content)
+    # List of project files from GitHub
+    project_files = ["arrp","coonoor_mcc", "custom", "krrp"]
+    for project_file in project_files:
+        project_name = project_file.replace('_', ' ').upper()
+        url = f"https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/projects/{project_file}.csv"
+        response = requests.get(url)
+        project_data = parse_csv_file(response.text)
         projects[project_name] = project_data
     return projects
 
 @st.cache_data
 def load_constants_cached():
     """Load constants from CSV and return as dictionary."""
-    constants_df = pd.read_csv("data/constants.csv")
+    constants_df = pd.read_csv("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/data/constants.csv")
     return {row['name']: {
         'value': row['value'], 
         'units': row['units'], 
@@ -150,7 +152,7 @@ projects = load_projects_cached()
 
 # Sidebar
 with st.sidebar:
-    st.image("images/logo_finish-wit-retina.png", width=200)
+    st.image("https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/images/logo_finish-wit-retina.png", width=200)
     st.markdown("---")
     
     st.header("About FINISH Mondial")
@@ -171,8 +173,9 @@ with st.sidebar:
     """)
 
 # Main content
-with open("images/hqdefault.jpg", "rb") as img_file:
-    img_base64 = base64.b64encode(img_file.read()).decode()
+header_img_url = "https://raw.githubusercontent.com/dalyw/finish-mondial-kpis/refs/heads/main/finish_mondial_kpis/images/hqdefault.jpg"
+response = requests.get(header_img_url)
+img_base64 = base64.b64encode(response.content).decode()
 st.markdown(
     f"""
     <div style="position: relative; width: 100%; height: 200px; margin-bottom: -300px;">
